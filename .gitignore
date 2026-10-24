@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# Go binaries
+backend/serasiwo-backend
+backend/*.exe
+backend/*.out
+
+# OS & Env
+.DS_Store
+.env
+*.local
