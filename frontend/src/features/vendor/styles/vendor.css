@@ -1,0 +1,21 @@
+/* ==========================================================================
+   SerasiWO Vendor Mitra - Central Stylesheet Registry (Clean Code Architecture)
+   Modular CSS Architecture following Single Responsibility Principle:
+   - vendor-layout.css: App Shell, Sidebar, Locked 64px Topbar, Page Containers
+   - vendor-overview.css: Dashboard Overview & Metric Cards
+   - vendor-jobs.css: High-Density Jobs Data Table & Detail Drawers
+   - vendor-calendar.css: Availability Calendar & Blocking
+   - vendor-readiness.css: Production Readiness Checklists
+   - vendor-payout.css: Payout & Invoices
+   - vendor-operations.css: Operational Pages (Loading, Manifest, PIC, SOP, Profile, Bank)
+   - vendor-modals.css: Modal Dialogs & Toast Notifications
+   ========================================================================== */
+
+@import './vendor-layout.css';
+@import './vendor-overview.css';
+@import './vendor-jobs.css';
+@import './vendor-calendar.css';
+@import './vendor-readiness.css';
+@import './vendor-payout.css';
+@import './vendor-operations.css';
+@import './vendor-modals.css';

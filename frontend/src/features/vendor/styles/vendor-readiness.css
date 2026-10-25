@@ -1,0 +1,238 @@
+/* ==========================================================================
+   SerasiWO Vendor Readiness - Production Checklist Styles
+   Modular CSS Component for /dashboard/vendor/readiness
+   ========================================================================== */
+
+.vendor-readiness-intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.vendor-badge-update {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background-color: rgba(255, 89, 0, 0.12);
+  color: var(--color-ember-text);
+  border: 1px solid rgba(255, 89, 0, 0.25);
+}
+
+.vendor-readiness-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.vendor-readiness-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.readiness-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.readiness-wedding-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+}
+
+.readiness-meta-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+}
+
+.readiness-meta-sep {
+  opacity: 0.5;
+}
+
+.readiness-status-badge-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.readiness-current-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  background-color: var(--surface-subtle);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-hairline);
+}
+
+.readiness-percent-chip {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  background-color: var(--color-ember);
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.readiness-progress-track {
+  height: 6px;
+  background-color: var(--surface-subtle);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.readiness-progress-fill {
+  height: 100%;
+  background-color: var(--color-ember);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.readiness-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.readiness-step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background-color: var(--surface-subtle);
+  border: 1px solid var(--border-hairline);
+  border-radius: 10px;
+  padding: 14px 16px;
+  transition: all 0.15s ease;
+}
+
+.readiness-step-item.step-item-completed {
+  background-color: rgba(34, 197, 94, 0.05);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.readiness-step-checkbox {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.step-checkbox-inner {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 2px solid var(--border-input);
+  background-color: var(--surface-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+  transition: all 0.15s ease;
+}
+
+.readiness-step-checkbox.checked .step-checkbox-inner {
+  background-color: #22c55e;
+  border-color: #22c55e;
+}
+
+.step-content-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.step-label-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.step-order-pill {
+  font-size: 10px;
+  font-weight: 700;
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-hairline);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--text-tertiary);
+}
+
+.step-main-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.step-timestamp {
+  font-size: 11px;
+  color: #16a34a;
+  margin-left: auto;
+  font-weight: 500;
+}
+
+.readiness-step-desc {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.readiness-proof-box {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.readiness-step-note-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.step-notes-input {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 12.5px;
+  color: var(--text-primary);
+  outline: none;
+  flex: 1;
+  min-width: 220px;
+  min-height: 40px;
+}
+
+.step-notes-input:focus {
+  border-color: var(--color-ember);
+}

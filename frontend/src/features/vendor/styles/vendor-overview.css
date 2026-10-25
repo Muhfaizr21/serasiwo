@@ -1,0 +1,684 @@
+/* ==========================================================================
+   SerasiWO Vendor Overview - Modular Styles
+   Component for /dashboard/vendor (Overview Dashboard)
+   ========================================================================== */
+
+/* Dedicated Overview Toolbar */
+.vendor-overview-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: 12px;
+  padding: 12px 20px;
+  flex-wrap: wrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.vendor-filter-pill-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: var(--surface-subtle);
+  padding: 3px;
+  border-radius: 8px;
+  border: 1px solid var(--border-hairline);
+}
+
+.vendor-toolbar-pill {
+  border: none;
+  background: transparent;
+  padding: 7px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.vendor-toolbar-pill:hover {
+  color: var(--text-primary);
+}
+
+.vendor-toolbar-pill.active {
+  background-color: var(--color-ember);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(255, 89, 0, 0.2);
+}
+
+.vendor-toolbar-meta {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.vendor-toolbar-meta code {
+  background-color: var(--surface-subtle);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border-hairline);
+  color: var(--text-primary);
+  font-family: monospace;
+}
+
+/* KPI Card Grid */
+.smarthr-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.smarthr-kpi-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.smarthr-kpi-card:hover {
+  border-color: rgba(255, 89, 0, 0.25);
+  transform: translateY(-1px);
+}
+
+.smarthr-kpi-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.smarthr-kpi-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-tertiary);
+}
+
+.smarthr-kpi-icon-bubble {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background-color: var(--surface-subtle);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ember-bubble {
+  background-color: rgba(255, 89, 0, 0.12);
+  color: var(--color-ember);
+}
+
+.blue-bubble {
+  background-color: rgba(59, 130, 246, 0.12);
+  color: #3b82f6;
+}
+
+.purple-bubble {
+  background-color: rgba(168, 85, 247, 0.12);
+  color: #a855f7;
+}
+
+.smarthr-kpi-value-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.smarthr-kpi-val {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.smarthr-kpi-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.trend-up {
+  color: #16a34a;
+}
+
+.trend-amber {
+  color: #d97706;
+}
+
+.live-amber-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #f59e0b;
+  display: inline-block;
+}
+
+.smarthr-kpi-bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--text-tertiary);
+}
+
+/* Weekly overview panels */
+.smarthr-dual-panel-grid,
+.smarthr-row-two {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: 20px;
+}
+
+@media (max-width: 1024px) {
+  .smarthr-dual-panel-grid,
+  .smarthr-row-two {
+    grid-template-columns: 1fr;
+  }
+}
+
+.smarthr-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: 12px;
+  padding: 20px 22px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.smarthr-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.smarthr-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.015em;
+}
+
+.card-sub-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 2px 0 0 0;
+}
+
+.badge-readonly-tag {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background-color: rgba(34, 197, 94, 0.12);
+  color: #15803d;
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.smarthr-link-btn {
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-ember-text);
+  cursor: pointer;
+  padding: 0;
+}
+
+.smarthr-link-btn:hover {
+  text-decoration: underline;
+}
+
+/* Ringkasan Acara List & Cards */
+.ringkasan-acara-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.acara-item-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background-color: var(--surface-subtle);
+  border: 1px solid var(--border-hairline);
+  border-radius: 10px;
+  padding: 14px 16px;
+  transition: all 0.15s ease;
+}
+
+.acara-item-card:hover {
+  border-color: var(--color-ember);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.acara-item-card.acara-today {
+  border-left: 4px solid var(--color-ember);
+  background-color: rgba(255, 89, 0, 0.03);
+}
+
+.acara-date-badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-hairline);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.acara-day {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.acara-month {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+
+.acara-pill-today {
+  font-size: 8.5px;
+  font-weight: 700;
+  background-color: var(--color-ember);
+  color: #fff;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-top: 2px;
+}
+
+.acara-day-name {
+  font-size: 9px;
+  color: var(--text-tertiary);
+  margin-top: 1px;
+}
+
+.acara-info-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.acara-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.acara-couple-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.acara-wo-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background-color: rgba(34, 197, 94, 0.15);
+  color: #15803d;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.acara-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+}
+
+.acara-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  border-top: 1px dashed var(--border-hairline);
+  padding-top: 8px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.acara-pic {
+  color: var(--text-tertiary);
+}
+
+.acara-readiness-chip {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-ember-text);
+}
+
+/* Peak Hours Timeline */
+.peak-hours-content {
+  padding: 4px 0;
+}
+
+.peak-hours-graph-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.peak-hour-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.peak-hour-time {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  width: 44px;
+}
+
+.peak-hour-bar-track {
+  flex: 1;
+  height: 8px;
+  background-color: var(--surface-subtle);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.peak-hour-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.peak-hour-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  width: 140px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Row 3: Middle Grid */
+.smarthr-middle-grid {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 20px;
+}
+
+@media (max-width: 1024px) {
+  .smarthr-middle-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.storage-capsules-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 14px 0 6px 0;
+}
+
+.capsule-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.capsule-top-amount {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.capsule-tube {
+  width: 36px;
+  height: 125px;
+  background-color: var(--surface-subtle);
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  border: 1px solid var(--border-hairline);
+}
+
+.capsule-tube-highlight {
+  border-color: rgba(255, 89, 0, 0.4);
+}
+
+.capsule-tube-fill {
+  width: 100%;
+  background-color: var(--color-ember);
+  border-radius: 18px;
+  transition: height 0.4s ease;
+}
+
+.capsule-label {
+  font-size: 10.5px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Heatmap Grid */
+.heatmap-legend-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10.5px;
+}
+
+.legend-chip-low,
+.legend-chip-mid,
+.legend-chip-high {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.legend-chip-low {
+  background-color: var(--surface-subtle);
+  color: var(--text-tertiary);
+}
+
+.legend-chip-mid {
+  background-color: rgba(245, 158, 11, 0.2);
+  color: #b45309;
+}
+
+.legend-chip-high {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #b91c1c;
+}
+
+.heatmap-grid-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 8px 0;
+}
+
+.heatmap-grid-body {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 500px;
+}
+
+.heatmap-row {
+  display: flex;
+  gap: 5px;
+}
+
+.heatmap-cell {
+  flex: 1;
+  height: 14px;
+  border-radius: 3px;
+  background-color: var(--surface-subtle);
+  transition: transform 0.1s ease;
+}
+
+.heatmap-cell:hover {
+  transform: scale(1.2);
+}
+
+.heat-level-0 {
+  background-color: var(--surface-subtle);
+}
+
+.heat-level-1 {
+  background-color: rgba(34, 197, 94, 0.35);
+}
+
+.heat-level-2 {
+  background-color: rgba(245, 158, 11, 0.55);
+}
+
+.heat-level-3 {
+  background-color: rgba(239, 68, 68, 0.65);
+}
+
+/* Incidents / Pending Booking Table */
+.badge-pending-count {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background-color: rgba(245, 158, 11, 0.15);
+  color: #b45309;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.smarthr-btn-orange-solid {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  min-height: 44px;
+  border-radius: 8px;
+  background-color: var(--color-ember);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.smarthr-btn-orange-solid:hover {
+  background-color: #e04e00;
+}
+
+.smarthr-table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.smarthr-incidents-table {
+  width: 100%;
+  min-width: 650px;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  text-align: left;
+}
+
+.smarthr-incidents-table th {
+  padding: 10px 14px;
+  background-color: var(--surface-subtle);
+  color: var(--text-tertiary);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.smarthr-incidents-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-hairline);
+  vertical-align: middle;
+}
+
+.table-sub-detail {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+
+.smarthr-table-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  min-height: 40px;
+  border-radius: 8px;
+  background-color: var(--surface-subtle);
+  color: var(--color-ember-text);
+  border: 1px solid var(--color-ember);
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.smarthr-table-action-btn:hover {
+  background-color: var(--color-ember);
+  color: #fff;
+}
+
+@media (max-width: 1024px) {
+  .smarthr-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .smarthr-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vendor-overview-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

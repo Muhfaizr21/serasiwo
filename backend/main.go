@@ -10,7 +10,14 @@ import (
 
 func main() {
 	cfg := config.LoadConfig()
-	router := routes.SetupRouter()
+	sb := config.InitSupabase(cfg)
+	if sb.IsConfigured() {
+		log.Printf("Supabase dikonfigurasi: %s\n", sb.BaseURL)
+	} else {
+		log.Println("Peringatan: Variabel environment Supabase belum lengkap di .env")
+	}
+
+	router := routes.SetupRouter(sb)
 
 	addr := fmt.Sprintf(":%s", cfg.Port)
 	log.Printf("Server berjalan di http://localhost%s (env: %s)\n", addr, cfg.Env)

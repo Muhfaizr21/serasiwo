@@ -1,0 +1,207 @@
+package auth
+
+import "time"
+
+func buildDefaultRoles() []RoleProfile {
+	return []RoleProfile{
+		{
+			ID:      "role-super-admin",
+			Slug:    RoleSuperAdmin,
+			Title:   "Super Admin",
+			Actor:   "Pemilik WO",
+			Summary: "Otoritas tertinggi untuk memantau metrik keuangan, melakukan override jadwal bentrok, serta memegang kendali penuh atas data klien, vendor, dan pengaturan sistem.",
+			Permissions: []PermissionRule{
+				{
+					Module:          "Dashboard Eksklusif",
+					AccessLabel:     "Read-Only",
+					AllowedOps:      []string{"READ"},
+					RestrictedOps:   []string{},
+					Description:     "Melihat seluruh metrik keuangan dan grafik performa bisnis secara menyeluruh.",
+					OperationalNote: "Data agregat dikunci dari modifikasi manual untuk menjaga akurasi audit.",
+				},
+				{
+					Module:          "Kalender Master",
+					AccessLabel:     "Full Control + Override",
+					AllowedOps:      []string{"CREATE", "READ", "UPDATE", "DELETE", "OVERRIDE"},
+					RestrictedOps:   []string{},
+					Description:     "Melihat seluruh jadwal dan menggunakan tombol khusus Override untuk menggeser jadwal acara atau vendor secara paksa.",
+					OperationalNote: "Dapat melewati peringatan jadwal bentrok saat kondisi darurat.",
+				},
+				{
+					Module:          "Manajemen Klien & Proyek",
+					AccessLabel:     "Full Control",
+					AllowedOps:      []string{"CREATE", "READ", "UPDATE", "DELETE"},
+					RestrictedOps:   []string{},
+					Description:     "Menambah, melihat, mengedit, dan menghapus data klien beserta arsip portofolio masa lalu.",
+					OperationalNote: "Satu-satunya role yang memiliki hak hapus permanen atas data klien.",
+				},
+				{
+					Module:          "Manajemen Vendor & Mitra",
+					AccessLabel:     "Full Control",
+					AllowedOps:      []string{"CREATE", "READ", "UPDATE", "DELETE"},
+					RestrictedOps:   []string{},
+					Description:     "Menambah vendor baru, mengedit kontrak dasar, serta menghapus atau memblokir vendor yang bermasalah.",
+					OperationalNote: "Perubahan harga dasar kontrak vendor hanya sah melalui akun ini.",
+				},
+				{
+					Module:          "Keuangan & Laba Rugi",
+					AccessLabel:     "Read & Export",
+					AllowedOps:      []string{"READ", "EXPORT"},
+					RestrictedOps:   []string{},
+					Description:     "Melihat mutasi arus kas, margin laba bersih per proyek, dan mengekspor laporan ke format Excel atau PDF.",
+					OperationalNote: "Laporan laba bersih disembunyikan sepenuhnya dari role lain.",
+				},
+				{
+					Module:          "Pengaturan Sistem",
+					AccessLabel:     "Full Control",
+					AllowedOps:      []string{"CREATE", "READ", "UPDATE", "DELETE"},
+					RestrictedOps:   []string{},
+					Description:     "Membuat akun baru untuk admin atau vendor, menetapkan batasan hak akses, mengubah harga dasar paket, dan memeriksa log aktivitas.",
+					OperationalNote: "Mencatat riwayat siapa yang mengubah data beserta waktu perubahannya.",
+				},
+			},
+		},
+		{
+			ID:      "role-admin-ops",
+			Slug:    RoleAdminOps,
+			Title:   "Admin Operasional",
+			Actor:   "Koordinator Lapangan",
+			Summary: "Pelaksana harian untuk menyusun rundown, mengelola kelengkapan dokumen klien, mengirim request booking vendor, dan memverifikasi pelunasan tagihan klien.",
+			Permissions: []PermissionRule{
+				{
+					Module:          "Dashboard Operasional",
+					AccessLabel:     "Read & Update",
+					AllowedOps:      []string{"READ", "UPDATE"},
+					RestrictedOps:   []string{"DELETE"},
+					Description:     "Melihat daftar tugas harian dan mencentang tugas yang sudah selesai (mark as done).",
+					OperationalNote: "Fokus pada penyelesaian daftar kerja harian kru.",
+				},
+				{
+					Module:          "Kalender Acara",
+					AccessLabel:     "Read-Only",
+					AllowedOps:      []string{"READ"},
+					RestrictedOps:   []string{"UPDATE", "DELETE", "OVERRIDE"},
+					Description:     "Melihat jadwal keseluruhan acara dan kegiatan seperti fitting atau survei lokasi.",
+					OperationalNote: "Tidak bisa menggeser tanggal apabila kalender sudah terkunci.",
+				},
+				{
+					Module:          "Manajemen Klien",
+					AccessLabel:     "Create, Read, Update",
+					AllowedOps:      []string{"CREATE", "READ", "UPDATE"},
+					RestrictedOps:   []string{"DELETE"},
+					Description:     "Mendaftarkan klien baru, melengkapi dokumen, dan memperbarui request klien.",
+					OperationalNote: "Hak Hapus (Delete) ditutup untuk mencegah kehilangan data secara tidak sengaja.",
+				},
+				{
+					Module:          "Manajemen Proyek (Per Event)",
+					AccessLabel:     "Create, Read, Update",
+					AllowedOps:      []string{"CREATE", "READ", "UPDATE"},
+					RestrictedOps:   []string{"DELETE"},
+					Description:     "Menyusun rundown acara, membagi tugas kru lapangan, dan memperbarui checklist persiapan barang.",
+					OperationalNote: "Perubahan langsung tersinkronisasi ke jadwal kerja tim lapangan.",
+				},
+				{
+					Module:          "Booking & Ketersediaan Vendor",
+					AccessLabel:     "Create, Read, Update",
+					AllowedOps:      []string{"CREATE", "READ", "UPDATE"},
+					RestrictedOps:   []string{"DELETE"},
+					Description:     "Mengirim request booking ke vendor dan membatalkan request apabila vendor belum merespons.",
+					OperationalNote: "Tidak bisa mengubah harga booking yang sudah disetujui tanpa izin Super Admin.",
+				},
+				{
+					Module:          "Penagihan (Invoicing Klien)",
+					AccessLabel:     "Create, Read, Update",
+					AllowedOps:      []string{"CREATE", "READ", "UPDATE"},
+					RestrictedOps:   []string{"DELETE"},
+					Description:     "Membuat draf invoice DP atau Pelunasan, mengirimkannya ke klien, dan memperbarui status tagihan menjadi Lunas setelah mengecek mutasi bank.",
+					OperationalNote: "Tidak memiliki akses untuk melihat total keuntungan bersih WO.",
+				},
+			},
+		},
+		{
+			ID:      "role-vendor-mitra",
+			Slug:    RoleVendorMitra,
+			Title:   "Vendor Mitra",
+			Actor:   "Katering, MUA, Dekorasi",
+			Summary: "Portal terfokus bagi mitra eksternal untuk mengatur kalender ketersediaan, merespons pesanan pekerjaan, memperbarui kesiapan produksi, dan mengunggah tagihan layanan.",
+			Permissions: []PermissionRule{
+				{
+					Module:          "Dashboard Vendor",
+					AccessLabel:     "Read-Only",
+					AllowedOps:      []string{"READ"},
+					RestrictedOps:   []string{"CREATE", "UPDATE", "DELETE"},
+					Description:     "Melihat notifikasi booking baru dan ringkasan acara mereka pada minggu berjalan.",
+					OperationalNote: "Hanya menampilkan acara yang ditugaskan kepada vendor terkait.",
+				},
+				{
+					Module:          "Kalender Ketersediaan",
+					AccessLabel:     "Read & Update",
+					AllowedOps:      []string{"READ", "UPDATE"},
+					RestrictedOps:   []string{"DELETE"},
+					Description:     "Melihat jadwal acara dari WO dan menekan tombol Blokir Tanggal saat sedang penuh (full booked) oleh pesanan di luar WO.",
+					OperationalNote: "Mencegah pengiriman request booking pada tanggal yang sudah penuh.",
+				},
+				{
+					Module:          "Manajemen Pekerjaan (Jobs)",
+					AccessLabel:     "Read & Update",
+					AllowedOps:      []string{"READ", "UPDATE"},
+					RestrictedOps:   []string{"CREATE", "DELETE"},
+					Description:     "Melihat detail request booking (jam, lokasi, jumlah porsi) dan menekan tombol aksi Terima atau Tolak pesanan.",
+					OperationalNote: "Keputusan Terima atau Tolak langsung memperbarui status kesiapan proyek.",
+				},
+				{
+					Module:          "Update Status Kesiapan",
+					AccessLabel:     "Update",
+					AllowedOps:      []string{"UPDATE"},
+					RestrictedOps:   []string{"DELETE"},
+					Description:     "Mencentang status progres layanan mereka sendiri: Bahan Mentah Siap menuju Loading hingga Selesai.",
+					OperationalNote: "Hanya dapat mengubah progres milik unit kerjanya sendiri.",
+				},
+				{
+					Module:          "Penagihan Vendor (Payout)",
+					AccessLabel:     "Create & Read",
+					AllowedOps:      []string{"CREATE", "READ"},
+					RestrictedOps:   []string{"UPDATE", "DELETE"},
+					Description:     "Mengunggah invoice atau struk tagihan layanan ke sistem WO dan memantau apakah pembayaran sudah dicairkan atau masih tertunda.",
+					OperationalNote: "Pencairan dana diverifikasi oleh tim internal WO.",
+				},
+			},
+		},
+	}
+}
+
+func buildDefaultUsers() []User {
+	now := time.Now()
+	return []User{
+		{
+			ID:        "usr-superadmin-01",
+			Email:     "owner@serasiwo.com",
+			Name:      "Baskoro Adiwijaya",
+			Role:      RoleSuperAdmin,
+			RoleTitle: "Super Admin",
+			RoleLabel: "Pemilik WO",
+			CreatedAt: now.Add(-180 * 24 * time.Hour),
+		},
+		{
+			ID:        "usr-adminops-01",
+			Email:     "operasional@serasiwo.com",
+			Name:      "Dian Paramita",
+			Role:      RoleAdminOps,
+			RoleTitle: "Admin Operasional",
+			RoleLabel: "Koordinator Lapangan",
+			CreatedAt: now.Add(-90 * 24 * time.Hour),
+		},
+		{
+			ID:             "usr-vendor-01",
+			Email:          "vendor@serasiwo.com",
+			Name:           "Hendra Kusuma",
+			Role:           RoleVendorMitra,
+			RoleTitle:      "Vendor Mitra",
+			RoleLabel:      "Katering & Dekorasi",
+			VendorID:       "vnd-berkah-rasa",
+			VendorName:     "Berkah Rasa Premium Catering",
+			VendorCategory: "Katering",
+			CreatedAt:      now.Add(-60 * 24 * time.Hour),
+		},
+	}
+}

@@ -1,0 +1,248 @@
+/* ==========================================================================
+   SerasiWO Vendor Modals - Dialogs & Floating Feedback Styles
+   Modular CSS Component for Vendor Modals & Toast
+   ========================================================================== */
+
+.vendor-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 7, 16, 0.65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
+}
+
+.vendor-modal-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: 14px;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.vendor-modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-hairline);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vendor-modal-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.vendor-modal-close {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.vendor-modal-body {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.vendor-modal-desc {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.vendor-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.vendor-field-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.vendor-field-input,
+.vendor-field-textarea {
+  background-color: var(--surface-subtle);
+  border: 1px solid var(--border-hairline);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-family: inherit;
+  font-size: 12.5px;
+  color: var(--text-primary);
+  outline: none;
+}
+
+.vendor-field-input:focus,
+.vendor-field-textarea:focus {
+  border-color: var(--color-ember);
+  box-shadow: 0 0 0 3px rgba(255, 89, 0, 0.12);
+}
+
+.vendor-modal-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.vendor-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 2px;
+}
+
+.vendor-radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.vendor-upload-dropzone {
+  border: 1.5px dashed var(--border-input);
+  border-radius: 10px;
+  padding: 16px;
+  background-color: var(--surface-subtle);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.upload-file-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-ember-text);
+}
+
+.vendor-toast-floating.vendor-toast-warning {
+  border-color: #f59e0b;
+}
+
+.vendor-toast-warning .vendor-toast-icon {
+  background-color: rgba(245, 158, 11, 0.2);
+  color: #d97706;
+}
+
+.vendor-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+/* Floating Toast Notification */
+.vendor-toast-floating {
+  position: fixed;
+  top: 18px;
+  right: 22px;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  font-size: 12.5px;
+  font-weight: 600;
+  background-color: var(--surface-card);
+  color: var(--text-primary);
+  border: 1px solid #22c55e;
+}
+
+.vendor-toast-floating.vendor-toast-error {
+  border-color: #ef4444;
+}
+
+.vendor-toast-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.vendor-toast-success .vendor-toast-icon {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #16a34a;
+}
+
+.vendor-toast-error .vendor-toast-icon {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.secondary-surface-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
+  min-height: 40px;
+  border-radius: 8px;
+  border: 1px solid var(--border-hairline);
+  background-color: var(--surface-subtle);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.secondary-surface-btn:hover {
+  background-color: var(--surface-card);
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+.btn-action-accept {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  min-height: 40px;
+  border-radius: 8px;
+  background-color: #16a34a;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-action-accept:hover {
+  background-color: #15803d;
+}

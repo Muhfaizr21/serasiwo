@@ -11,4 +11,6 @@ backend/*.out
 # OS & Env
 .DS_Store
 .env
+.env.*
+!.env.example
 *.local
