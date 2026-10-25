@@ -3,10 +3,17 @@ node_modules/
 frontend/node_modules/
 frontend/dist/
 
-# Go binaries
+# Go binaries & local runtime data
 backend/serasiwo-backend
 backend/*.exe
 backend/*.out
+backend/data/*.json
+
+# Local data & temp
+data/
+**/.temp/
+.agents/
+.mcp.json
 
 # OS & Env
 .DS_Store

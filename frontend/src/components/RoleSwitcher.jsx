@@ -44,8 +44,12 @@ export function RoleSwitcher({ currentRoleId = 'vendor_mitra' }) {
 
   const handleSelectRole = (role) => {
     setIsOpen(false)
-    if (role.path) {
-      navigate(role.path)
+    if (role.id === 'vendor_mitra') {
+      navigate('/dashboard/vendor')
+    } else if (role.id === 'super_admin') {
+      navigate('/login', { state: { selectRole: 'Super Admin' } })
+    } else if (role.id === 'admin_ops') {
+      navigate('/login', { state: { selectRole: 'Admin Operasional' } })
     }
   }
 

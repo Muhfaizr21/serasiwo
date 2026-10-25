@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useVendor } from '../context/useVendor'
 import { vendorService } from '../services/vendorService'
-import { formatShortDateID } from '../utils/vendorFormatters'
+import { formatLongDateID, formatShortDateID } from '../utils/vendorFormatters'
 
 const MONTH_NAMES = [
   'Januari',
@@ -32,12 +32,17 @@ const INITIAL_NOW = new Date()
 const INITIAL_TODAY_STR = INITIAL_NOW.toISOString().split('T')[0]
 
 export function VendorCalendarTab() {
-  const { openModal, showToast, refreshTick, reloadDashboard } = useVendor()
-  const [calendarData, setCalendarData] = useState({ blocked_dates: [], wo_events: [] })
+  const { openModal, showToast, refreshTick, reloadDashboard, setActiveTab } = useVendor()
+  const [calendarData, setCalendarData] = useState({
+    blocked_dates: [],
+    wo_events: [],
+    source: 'backend_db',
+  })
 
   const [currentYear, setCurrentYear] = useState(() => INITIAL_NOW.getFullYear())
   const [currentMonth, setCurrentMonth] = useState(() => INITIAL_NOW.getMonth())
   const [calendarFilter, setCalendarFilter] = useState('all')
+  const [selectedDate, setSelectedDate] = useState(INITIAL_TODAY_STR)
 
   const loadCalendar = useCallback(async () => {
     try {
@@ -67,7 +72,7 @@ export function VendorCalendarTab() {
     try {
       await vendorService.toggleDateBlock(date, false, '')
       showToast(
-        `Tanggal ${date} berhasil dibuka kembali untuk booking SerasiWO`,
+        `Tanggal ${formatShortDateID(date)} berhasil dibuka kembali untuk booking SerasiWO.`,
         'success'
       )
       await loadCalendar()
@@ -172,36 +177,73 @@ export function VendorCalendarTab() {
     })
   }, [calendarDays, calendarData.wo_events, activeBlockedDates, calendarFilter])
 
+  const selectedDayDetail = useMemo(() => {
+    const woEvent = calendarData.wo_events.find((e) => e.event_date === selectedDate)
+    const blockedItem = activeBlockedDates.find((b) => b.date === selectedDate)
+    return {
+      date: selectedDate,
+      woEvent,
+      blockedItem,
+    }
+  }, [selectedDate, calendarData.wo_events, activeBlockedDates])
+
+  const handleSelectCell = (d) => {
+    setSelectedDate(d.date)
+    if (!d.isWO && !d.isBlocked) {
+      openModal('block_date', {
+        date: d.date,
+        isBlocked: true,
+        reason: 'Full booked pesanan katering di luar WO',
+      })
+    }
+  }
+
   return (
     <div className="vendor-page-container vendor-tab-content">
+      {/* Standardized Enterprise Header */}
+      <div className="vendor-title-row">
+        <div className="vendor-title-left">
+          <div className="vendor-breadcrumb">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <span className="smarthr-crumb-sep">&gt;</span>
+            <span>Portal Mitra</span>
+            <span className="smarthr-crumb-sep">&gt;</span>
+            <span className="smarthr-crumb-active">Kalender Ketersediaan</span>
+          </div>
+          <h1 className="vendor-main-title">Kalender Ketersediaan &amp; Blokir Jadwal Mitra</h1>
+          <p className="vendor-header-subtitle">
+            Pantau jadwal acara resmi SerasiWO dan kunci tanggal apabila kapasitas produksi dapur telah penuh oleh pesanan eksternal.
+          </p>
+        </div>
+
+        <div className="vendor-title-badges">
+          <div className="vendor-status-chip chip-green">
+            <span className="chip-indicator green-dot" />
+            <span>
+              Database: <strong>{calendarData.source === 'backend_db' ? 'Terhubung API & DB' : 'Replikasi Lokal'}</strong>
+            </span>
+          </div>
+          <button
+            type="button"
+            className="btn-ember-primary"
+            onClick={() =>
+              openModal('block_date', {
+                date: selectedDate,
+                isBlocked: true,
+                reason: 'Full booked pesanan katering di luar WO',
+              })
+            }
+          >
+            + Blokir Tanggal Baru
+          </button>
+        </div>
+      </div>
+
       <div className="vendor-calendar-layout">
         <div className="vendor-card-panel vendor-calendar-main">
-          <div className="vendor-panel-header">
-            <div>
-              <div className="calendar-title-badge-row">
-                <h2 className="vendor-panel-title">Kalender Ketersediaan Mitra</h2>
-                <span className="badge-update-tag">Akses: Read &amp; Update</span>
-              </div>
-              <p className="vendor-panel-subtitle">
-                Pantau jadwal resmi SerasiWO dan gunakan tombol &quot;Blokir Tanggal&quot; jika penuh pesanan luar WO.
-              </p>
-            </div>
-
-            <div className="vendor-panel-actions">
-              <button
-                type="button"
-                className="btn-ember-primary"
-                onClick={() => openModal('block_date')}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="12" y1="5" x2="12" y2="19" />
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                </svg>
-                <span>+ Blokir Tanggal Baru</span>
-              </button>
-            </div>
-          </div>
-
           <div className="calendar-month-toolbar">
             <div className="month-picker-group">
               <button
@@ -229,13 +271,14 @@ export function VendorCalendarTab() {
                 onClick={() => {
                   setCurrentYear(INITIAL_NOW.getFullYear())
                   setCurrentMonth(INITIAL_NOW.getMonth())
+                  setSelectedDate(INITIAL_TODAY_STR)
                 }}
               >
                 Hari Ini
               </button>
             </div>
 
-            <div className="calendar-filter-pills">
+            <div className="calendar-filter-pills" role="group" aria-label="Filter Kalender">
               <button
                 type="button"
                 className={`cal-filter-btn ${calendarFilter === 'all' ? 'active' : ''}`}
@@ -288,10 +331,14 @@ export function VendorCalendarTab() {
             <div className="calendar-days-container">
               {filteredDays.map((d, index) => {
                 const { woEvent, isWO, blockedItem, isBlocked, isDimmed } = d
+                const isSelected = d.date === selectedDate
 
                 return (
                   <div
                     key={`${d.date}-${index}`}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Tanggal ${d.date}`}
                     className={`calendar-day-cell ${
                       d.isOtherMonth ? 'day-cell-other-month' : ''
                     } ${
@@ -300,22 +347,14 @@ export function VendorCalendarTab() {
                         : isBlocked
                         ? 'day-cell-blocked'
                         : 'day-cell-available'
-                    } ${d.isToday ? 'day-cell-today' : ''} ${isDimmed ? 'day-cell-dimmed' : ''}`}
-                    onClick={() => {
-                      if (isWO) {
-                        showToast(
-                          `Tanggal ${d.date} telah terkunci resmi untuk acara SerasiWO: ${woEvent.title}`,
-                          'success'
-                        )
-                      } else if (isBlocked) {
-                        showToast(
-                          `Tanggal ${d.date} sedang diblokir: ${
-                            blockedItem.reason || 'Pesanan Luar'
-                          }. Anda dapat membukanya kembali di panel kanan.`,
-                          'warning'
-                        )
-                      } else {
-                        openModal('block_date', { date: d.date })
+                    } ${d.isToday ? 'day-cell-today' : ''} ${
+                      isSelected ? 'day-cell-selected' : ''
+                    } ${isDimmed ? 'day-cell-dimmed' : ''}`}
+                    onClick={() => handleSelectCell(d)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        handleSelectCell(d)
                       }
                     }}
                   >
@@ -331,7 +370,7 @@ export function VendorCalendarTab() {
                           <span className="day-badge-venue badge-venue-sub">
                             {woEvent.venue}
                           </span>
-                          <span className="day-badge-pill">WO</span>
+                          <span className="day-badge-pill">Terkunci WO</span>
                         </div>
                       )}
 
@@ -341,12 +380,12 @@ export function VendorCalendarTab() {
                           <span className="day-badge-venue badge-reason-sub">
                             {blockedItem.reason || 'Non-WO'}
                           </span>
-                          <span className="day-badge-pill">Blokir</span>
+                          <span className="day-badge-pill">Diblokir</span>
                         </div>
                       )}
 
                       {!isWO && !isBlocked && !d.isOtherMonth && (
-                        <span className="day-avail-hint">+ Blokir</span>
+                        <span className="day-avail-hint">+ Blokir Tanggal</span>
                       )}
                     </div>
                   </div>
@@ -357,11 +396,120 @@ export function VendorCalendarTab() {
         </div>
 
         <div className="vendor-side-panel-col">
+          {/* Dynamic Date Inspector Card */}
+          <div className="vendor-card-panel calendar-inspector-card">
+            <div className="inspector-header">
+              <span className="inspector-eyebrow">DETAIL TANGGAL TERPILIH</span>
+              <h3 className="inspector-date-title">{formatLongDateID(selectedDate)}</h3>
+            </div>
+
+            {selectedDayDetail.woEvent ? (
+              <div className="inspector-status-box wo-box">
+                <div className="inspector-badge-row">
+                  <span className="inspector-pill pill-wo">Acara Resmi SerasiWO</span>
+                  <span className="inspector-time">{selectedDayDetail.woEvent.time_slot}</span>
+                </div>
+                <strong className="inspector-event-name">
+                  {selectedDayDetail.woEvent.wedding_title}
+                </strong>
+                <p className="inspector-venue-text">
+                  Lokasi: {selectedDayDetail.woEvent.venue}
+                </p>
+                <div className="inspector-meta-grid">
+                  <div>
+                    <span>Kuantitas Pesanan:</span>
+                    <strong>
+                      {selectedDayDetail.woEvent.portions.toLocaleString('id-ID')}{' '}
+                      {selectedDayDetail.woEvent.unit_label}
+                    </strong>
+                  </div>
+                  <div>
+                    <span>Status Kesiapan:</span>
+                    <strong>{selectedDayDetail.woEvent.readiness_status}</strong>
+                  </div>
+                </div>
+                <div className="inspector-actions">
+                  <button
+                    type="button"
+                    className="secondary-surface-btn"
+                    onClick={() => setActiveTab('loading_schedule')}
+                  >
+                    Buka Jadwal Loading Dock
+                  </button>
+                  <button
+                    type="button"
+                    className="btn-ember-primary"
+                    onClick={() => setActiveTab('readiness')}
+                  >
+                    Update Kesiapan
+                  </button>
+                </div>
+              </div>
+            ) : selectedDayDetail.blockedItem ? (
+              <div className="inspector-status-box blocked-box">
+                <div className="inspector-badge-row">
+                  <span className="inspector-pill pill-blocked">Diblokir oleh Mitra</span>
+                </div>
+                <strong className="inspector-event-name">
+                  Kapasitas Dapur Penuh (Non-WO)
+                </strong>
+                <p className="inspector-venue-text">
+                  Alasan: {selectedDayDetail.blockedItem.reason}
+                </p>
+                <div className="inspector-actions">
+                  <button
+                    type="button"
+                    className="secondary-surface-btn"
+                    onClick={() =>
+                      openModal('block_date', {
+                        date: selectedDate,
+                        isBlocked: true,
+                        reason: selectedDayDetail.blockedItem.reason,
+                      })
+                    }
+                  >
+                    Ubah Alasan
+                  </button>
+                  <button
+                    type="button"
+                    className="vendor-unblock-btn"
+                    onClick={() => handleUnblock(selectedDate)}
+                  >
+                    Buka Kembali Tanggal
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="inspector-status-box avail-box">
+                <div className="inspector-badge-row">
+                  <span className="inspector-pill pill-avail">Tersedia untuk Booking WO</span>
+                </div>
+                <strong className="inspector-event-name">
+                  Slot Produksi Dapur Masih Terbuka
+                </strong>
+                <p className="inspector-venue-text">
+                  Admin Operasional SerasiWO dapat mengirimkan request pekerjaan katering pada tanggal ini.
+                </p>
+                <button
+                  type="button"
+                  className="btn-ember-primary"
+                  style={{ width: '100%' }}
+                  onClick={() =>
+                    openModal('block_date', {
+                      date: selectedDate,
+                      isBlocked: true,
+                      reason: 'Full booked pesanan katering di luar WO',
+                    })
+                  }
+                >
+                  Blokir Tanggal Ini ({formatShortDateID(selectedDate)})
+                </button>
+              </div>
+            )}
+          </div>
+
           <div className="vendor-card-panel access-info-panel">
-            <h3 className="vendor-panel-title">Aturan Ketersediaan</h3>
-            <p className="access-info-desc">
-              Sesuai SOP SerasiWO, mitra katering berhak memblokir tanggal jika kapasitas produksi mandiri telah penuh oleh pesanan di luar WO.
-            </p>
+            <h3 className="vendor-panel-title">Ringkasan Ketersediaan Bulan Ini</h3>
             <div className="access-stats-grid">
               <div className="access-stat-box">
                 <span className="stat-num text-green">{totalWO}</span>
@@ -378,7 +526,7 @@ export function VendorCalendarTab() {
             <div className="vendor-panel-header">
               <div>
                 <h3 className="vendor-panel-title">Daftar Tanggal Diblokir</h3>
-                <p className="vendor-panel-subtitle">Pesanan di luar SerasiWO</p>
+                <p className="vendor-panel-subtitle">Pesanan mandiri di luar SerasiWO</p>
               </div>
             </div>
 
@@ -387,7 +535,11 @@ export function VendorCalendarTab() {
                 <p className="vendor-empty-hint">Belum ada tanggal yang diblokir oleh mitra.</p>
               ) : (
                 activeBlockedDates.map((b) => (
-                  <div key={b.date} className="vendor-blocked-item">
+                  <div
+                    key={b.date}
+                    className="vendor-blocked-item"
+                    onClick={() => setSelectedDate(b.date)}
+                  >
                     <div className="vendor-blocked-item-info">
                       <strong>{formatShortDateID(b.date)}</strong>
                       <p>{b.reason || 'Penuh pesanan mandiri di luar WO'}</p>
@@ -396,7 +548,10 @@ export function VendorCalendarTab() {
                     <button
                       type="button"
                       className="vendor-unblock-btn"
-                      onClick={() => handleUnblock(b.date)}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleUnblock(b.date)
+                      }}
                       title="Buka kembali tanggal untuk booking SerasiWO"
                     >
                       Buka Kembali
@@ -409,7 +564,13 @@ export function VendorCalendarTab() {
             <button
               type="button"
               className="btn-outline-block-full"
-              onClick={() => openModal('block_date')}
+              onClick={() =>
+                openModal('block_date', {
+                  date: selectedDate,
+                  isBlocked: true,
+                  reason: 'Full booked pesanan katering di luar WO',
+                })
+              }
             >
               + Tambah Tanggal Blokir
             </button>

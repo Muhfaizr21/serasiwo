@@ -399,39 +399,106 @@
   gap: 10px;
 }
 
-.peak-hour-bar-row {
+.peak-hour-item-card {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 14px;
+  background-color: var(--surface-subtle);
+  border: 1px solid var(--border-hairline);
+  border-radius: 8px;
+  transition: all 0.15s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.peak-hour-time {
-  font-size: 11.5px;
+.peak-hour-item-card:hover {
+  background-color: var(--surface-card);
+  border-color: rgba(255, 89, 0, 0.35);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transform: translateY(-1px);
+}
+
+.peak-hour-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  width: 100%;
+}
+
+.peak-hour-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.peak-hour-time-badge {
+  font-size: 11px;
   font-weight: 700;
+  color: var(--text-secondary);
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-hairline);
+  padding: 2px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.peak-hour-title-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
+}
+
+.peak-hour-status-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.peak-hour-count {
+  font-size: 11px;
+  font-weight: 600;
   color: var(--text-tertiary);
-  width: 44px;
+  white-space: nowrap;
+}
+
+.peak-hour-pct-pill {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .peak-hour-bar-track {
-  flex: 1;
-  height: 8px;
-  background-color: var(--surface-subtle);
-  border-radius: 4px;
+  width: 100%;
+  height: 6px;
+  background-color: rgba(0, 0, 0, 0.06);
+  border-radius: 999px;
   overflow: hidden;
+}
+
+[data-theme='dark'] .peak-hour-bar-track {
+  background-color: rgba(255, 255, 255, 0.08);
 }
 
 .peak-hour-bar-fill {
   height: 100%;
-  border-radius: 4px;
+  border-radius: 999px;
   transition: width 0.3s ease;
-}
-
-.peak-hour-label {
-  font-size: 11px;
-  color: var(--text-secondary);
-  width: 140px;
-  text-align: right;
-  white-space: nowrap;
 }
 
 /* Row 3: Middle Grid */

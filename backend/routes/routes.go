@@ -23,7 +23,7 @@ func NewModuleHandlers(sb *config.SupabaseClient) *ModuleHandlers {
 	authSvc := auth.NewService()
 	superAdminSvc := superadmin.NewService()
 	adminOpsSvc := adminops.NewService()
-	vendorSvc := vendor.NewService()
+	vendorSvc := vendor.NewService(sb)
 
 	return &ModuleHandlers{
 		Health:     health.NewHandler(sb),
@@ -74,6 +74,13 @@ func SetupRouter(sb *config.SupabaseClient) http.Handler {
 	mux.HandleFunc("POST /api/vendor/readiness/{id}/step", onlyVendor(h.Vendor.UpdateReadiness))
 	mux.HandleFunc("GET /api/vendor/payouts", onlyVendor(h.Vendor.GetPayouts))
 	mux.HandleFunc("POST /api/vendor/payouts", onlyVendor(h.Vendor.CreatePayout))
+	mux.HandleFunc("POST /api/vendor/payouts/{id}/action", onlyVendor(h.Vendor.ActionPayout))
+	mux.HandleFunc("GET /api/vendor/loading-schedules", onlyVendor(h.Vendor.GetLoadingSchedules))
+	mux.HandleFunc("POST /api/vendor/loading-schedules/{eventId}/slot", onlyVendor(h.Vendor.UpdateLoadingSlot))
+	mux.HandleFunc("GET /api/vendor/menu-manifests", onlyVendor(h.Vendor.GetMenuManifests))
+	mux.HandleFunc("POST /api/vendor/menu-manifests/{eventId}/action", onlyVendor(h.Vendor.UpdateMenuManifest))
+	mux.HandleFunc("GET /api/vendor/profile", onlyVendor(h.Vendor.GetProfile))
+	mux.HandleFunc("POST /api/vendor/profile", onlyVendor(h.Vendor.UpdateProfile))
 
 	return middlewares.CORSMiddleware(mux)
 }

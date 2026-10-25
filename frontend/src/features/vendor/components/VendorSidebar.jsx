@@ -206,13 +206,20 @@ export function VendorSidebar() {
 
         <div className="smarthr-sidebar-footer">
           <div className="smarthr-footer-user-row">
-            <div className="smarthr-footer-avatar">BR</div>
+            <div className="smarthr-footer-avatar">
+              {(profile?.short_name || profile?.name || 'Mitra Vendor')
+                .split(/\s+/)
+                .filter(Boolean)
+                .slice(0, 2)
+                .map((w) => w[0].toUpperCase())
+                .join('') || 'MV'}
+            </div>
             <div className="smarthr-footer-info">
               <strong className="footer-vendor-name">
-                {profile?.short_name || 'Berkah Rasa Catering'}
+                {profile?.short_name || profile?.name || 'Mitra SerasiWO'}
               </strong>
               <span className="footer-vendor-badge">
-                Mitra Katering • {profile?.rating || '4.9'} ★
+                {profile?.category || 'Mitra Katering'} • {profile?.rating || '4.9'} ★
               </span>
             </div>
           </div>

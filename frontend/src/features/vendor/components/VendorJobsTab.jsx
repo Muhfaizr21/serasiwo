@@ -4,7 +4,8 @@ import { vendorService } from '../services/vendorService'
 import { formatRupiah, formatShortDateID } from '../utils/vendorFormatters'
 
 export function VendorJobsTab() {
-  const { openModal, showToast, searchQuery, refreshTick, reloadDashboard } = useVendor()
+  const { openModal, showToast, searchQuery, refreshTick, reloadDashboard, setActiveTab } =
+    useVendor()
   const [filter, setFilter] = useState('semua')
   const [jobs, setJobs] = useState([])
   const [expandedJobId, setExpandedJobId] = useState(null)
@@ -14,19 +15,19 @@ export function VendorJobsTab() {
 
   const loadJobs = useCallback(async () => {
     try {
-      const data = await vendorService.getJobs(filter)
-      setJobs(data)
+      const data = await vendorService.getJobs('semua')
+      setJobs(Array.isArray(data) ? data : [])
     } catch {
       showToast('Gagal memuat daftar pekerjaan', 'error')
     }
-  }, [filter, showToast])
+  }, [showToast])
 
   useEffect(() => {
     let active = true
     vendorService
-      .getJobs(filter)
+      .getJobs('semua')
       .then((data) => {
-        if (active) setJobs(data)
+        if (active) setJobs(Array.isArray(data) ? data : [])
       })
       .catch(() => {
         if (active) showToast('Gagal memuat daftar pekerjaan', 'error')
@@ -34,19 +35,19 @@ export function VendorJobsTab() {
     return () => {
       active = false
     }
-  }, [filter, refreshTick, showToast])
+  }, [refreshTick, showToast])
 
   const handleQuickAccept = async (job) => {
     try {
       await vendorService.actionJob(job.id, 'terima')
       showToast(
-        `Pesanan untuk ${job.wedding_title} berhasil diterima dan dijadwalkan!`,
+        `Pesanan untuk ${job.wedding_title} berhasil diterima dan masuk jadwal kalender!`,
         'success'
       )
       await loadJobs()
       await reloadDashboard()
-    } catch {
-      showToast('Gagal menerima pesanan pekerjaan', 'error')
+    } catch (err) {
+      showToast(err.message || 'Gagal menerima pesanan pekerjaan', 'error')
     }
   }
 
@@ -71,13 +72,16 @@ export function VendorJobsTab() {
 
   const processedJobs = useMemo(() => {
     const list = jobs.filter((j) => {
+      if (filter !== 'semua' && j.status !== filter) {
+        return false
+      }
       if (!activeSearch) return true
       const q = activeSearch.toLowerCase()
       return (
-        j.wedding_title.toLowerCase().includes(q) ||
-        j.venue.toLowerCase().includes(q) ||
-        j.bride_groom.toLowerCase().includes(q) ||
-        j.menu_or_notes.toLowerCase().includes(q)
+        (j.wedding_title || '').toLowerCase().includes(q) ||
+        (j.venue || '').toLowerCase().includes(q) ||
+        (j.bride_groom || '').toLowerCase().includes(q) ||
+        (j.menu_or_notes || '').toLowerCase().includes(q)
       )
     })
 
@@ -97,7 +101,57 @@ export function VendorJobsTab() {
       if (valA > valB) return sortOrder === 'asc' ? 1 : -1
       return 0
     })
-  }, [jobs, activeSearch, sortField, sortOrder])
+  }, [jobs, filter, activeSearch, sortField, sortOrder])
+
+  const handleExportCsv = () => {
+    if (processedJobs.length === 0) {
+      showToast('Tidak ada data pekerjaan untuk diekspor', 'error')
+      return
+    }
+    const headers = [
+      'ID Pekerjaan',
+      'Acara Pernikahan',
+      'Mempelai',
+      'Tanggal Acara',
+      'Sesi Waktu',
+      'Lokasi Venue',
+      'Jumlah Porsi',
+      'Paket Layanan',
+      'Estimasi Payout (IDR)',
+      'Status',
+    ]
+    const escapeCsv = (val) => `"${String(val ?? '').replace(/"/g, '""')}"`
+    const rows = processedJobs.map((j) =>
+      [
+        j.id,
+        j.wedding_title,
+        j.bride_groom,
+        j.event_date,
+        j.time_slot,
+        j.venue,
+        j.portions,
+        j.package_name || j.portion_unit_label,
+        j.payout_amount,
+        j.status,
+      ]
+        .map(escapeCsv)
+        .join(',')
+    )
+    const csvContent = '\uFEFF' + [headers.map(escapeCsv).join(','), ...rows].join('\n')
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute(
+      'download',
+      `Rekap_Pekerjaan_Vendor_SerasiWO_${new Date().toISOString().slice(0, 10)}.csv`
+    )
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+    showToast(`Berhasil mengekspor ${processedJobs.length} baris rekap pekerjaan ke CSV`, 'success')
+  }
 
   const counts = useMemo(() => {
     return {
@@ -238,9 +292,7 @@ export function VendorJobsTab() {
             <button
               type="button"
               className="secondary-surface-btn table-export-btn"
-              onClick={() =>
-                showToast('Mengekspor rekap pekerjaan mitra ke format Excel...', 'success')
-              }
+              onClick={handleExportCsv}
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -539,15 +591,19 @@ export function VendorJobsTab() {
                                   <button
                                     type="button"
                                     className="secondary-surface-btn btn-sm-action"
-                                    onClick={() =>
-                                      showToast(
-                                        `Mengunduh Event Brief PDF untuk ${job.wedding_title}...`,
-                                        'success'
-                                      )
-                                    }
+                                    onClick={() => setActiveTab('manifest_menu')}
                                   >
-                                    Unduh Brief PDF
+                                    Buka Surat Jalan &amp; Menu
                                   </button>
+                                  {isAccepted && (
+                                    <button
+                                      type="button"
+                                      className="btn-action-accept"
+                                      onClick={() => setActiveTab('readiness')}
+                                    >
+                                      Update Kesiapan Acara →
+                                    </button>
+                                  )}
                                   {isPending && (
                                     <>
                                       <button

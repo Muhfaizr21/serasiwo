@@ -27,20 +27,24 @@
   gap: 8px;
   min-height: 44px;
   padding: 10px 18px;
-  background-color: var(--color-ember);
+  background-color: #b83d00;
   color: #ffffff;
-  border: none;
-  border-radius: 8px;
+  border: 1px solid #b83d00;
+  border-radius: 12px;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(255, 89, 0, 0.25);
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
 .btn-ember-primary:hover {
-  background-color: #e04e00;
-  transform: translateY(-1px);
+  background-color: #9a3300;
+  border-color: #9a3300;
+}
+
+.btn-ember-primary:focus-visible {
+  outline: 2px solid var(--color-ember);
+  outline-offset: 2px;
 }
 
 .vendor-calendar-layout {
@@ -505,4 +509,156 @@
 
 .btn-outline-block-full:hover {
   background-color: rgba(255, 89, 0, 0.08);
+}
+
+
+/* ==========================================================================
+   Selected Date Inspector Card & Cell Selection States
+   ========================================================================== */
+.day-cell-selected {
+  outline: 2px solid var(--color-ember);
+  outline-offset: -2px;
+  box-shadow: 0 4px 14px rgba(255, 89, 0, 0.14);
+}
+
+.calendar-inspector-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.inspector-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.inspector-eyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--color-ember);
+}
+
+.inspector-date-title {
+  font-size: 15.5px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.inspector-status-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border-hairline);
+  background-color: var(--surface-subtle);
+}
+
+.inspector-status-box.wo-box {
+  border-left: 4px solid #16a34a;
+}
+
+.inspector-status-box.blocked-box {
+  border-left: 4px solid #ef4444;
+}
+
+.inspector-status-box.avail-box {
+  border-left: 4px solid var(--color-ember);
+}
+
+.inspector-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.inspector-pill {
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.inspector-pill.pill-wo {
+  background-color: rgba(22, 163, 74, 0.14);
+  color: #15803d;
+}
+
+.dark .inspector-pill.pill-wo {
+  color: #4ade80;
+}
+
+.inspector-pill.pill-blocked {
+  background-color: rgba(239, 68, 68, 0.14);
+  color: #b91c1c;
+}
+
+.dark .inspector-pill.pill-blocked {
+  color: #f87171;
+}
+
+.inspector-pill.pill-avail {
+  background-color: rgba(255, 89, 0, 0.14);
+  color: var(--color-ember);
+}
+
+.inspector-time {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.inspector-event-name {
+  font-size: 14.5px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.inspector-venue-text {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.45;
+}
+
+.inspector-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 10px;
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: 8px;
+}
+
+.inspector-meta-grid div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.inspector-meta-grid span {
+  font-size: 10.5px;
+  color: var(--text-tertiary);
+  font-weight: 600;
+}
+
+.inspector-meta-grid strong {
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+.inspector-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 4px;
 }

@@ -100,7 +100,7 @@ func (s *SupabaseClient) RestRequest(method, tablePath string, body interface{})
 	req.Header.Set("apikey", key)
 	req.Header.Set("Authorization", "Bearer "+key)
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Prefer", "return=representation")
+	req.Header.Set("Prefer", "resolution=merge-duplicates,return=representation")
 
 	resp, err := s.HTTPClient.Do(req)
 	if err != nil {

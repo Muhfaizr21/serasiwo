@@ -80,8 +80,8 @@
   --surface-subtle: var(--color-fog);
   --text-primary: var(--color-ink);
   --text-secondary: var(--color-graphite);
-  --text-tertiary: var(--color-pewter);
-  --border-hairline: #e4e5ec;
+  --text-tertiary: #5d6169;
+  --border-hairline: #d4d6e0;
   --border-input: var(--color-mist);
 
   /* Typography */

@@ -1,238 +1,312 @@
-/* ==========================================================================
-   SerasiWO Vendor Readiness - Production Checklist Styles
-   Modular CSS Component for /dashboard/vendor/readiness
-   ========================================================================== */
-
-.vendor-readiness-intro {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
+.readiness-matrix-table td {
+  vertical-align: middle;
 }
 
-.vendor-badge-update {
-  font-size: 11px;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 20px;
-  background-color: rgba(255, 89, 0, 0.12);
-  color: var(--color-ember-text);
-  border: 1px solid rgba(255, 89, 0, 0.25);
+.row-completed-highlight {
+  background-color: rgba(21, 128, 61, 0.03);
 }
 
-.vendor-readiness-stack {
+.readiness-pipeline-cell {
+  min-width: 390px;
+}
+
+.readiness-pipeline-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(92px, 1fr));
+  gap: 8px;
+  align-items: stretch;
+}
+
+.readiness-step-pill-btn {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-
-.vendor-readiness-card {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.readiness-card-header {
-  display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.readiness-wedding-title {
-  font-size: 17px;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin: 0 0 4px 0;
-}
-
-.readiness-meta-line {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border-hairline);
+  background-color: var(--surface-subtle);
   color: var(--text-secondary);
-  flex-wrap: wrap;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+  min-height: 56px;
 }
 
-.readiness-meta-sep {
-  opacity: 0.5;
+.readiness-step-pill-btn:hover:not(:disabled) {
+  border-color: var(--color-ember);
+  background-color: var(--surface-card);
 }
 
-.readiness-status-badge-group {
+.readiness-step-pill-btn:focus-visible {
+  outline: 2px solid var(--color-ember);
+  outline-offset: 2px;
+}
+
+.readiness-step-pill-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.readiness-step-pill-btn.step-pill-done {
+  background-color: rgba(21, 128, 61, 0.08);
+  border-color: rgba(21, 128, 61, 0.35);
+  color: var(--text-primary);
+}
+
+.readiness-step-pill-btn.step-pill-done:hover:not(:disabled) {
+  background-color: rgba(21, 128, 61, 0.13);
+  border-color: rgba(21, 128, 61, 0.55);
+}
+
+.readiness-step-pill-btn.step-pill-active {
+  background-color: rgba(255, 89, 0, 0.07);
+  border-color: var(--color-ember);
+  color: var(--text-primary);
+}
+
+.readiness-step-pill-btn.step-pill-locked {
+  background-color: var(--surface-subtle);
+}
+
+.step-pill-top {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  width: 100%;
+  gap: 4px;
 }
 
-.readiness-current-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-primary);
-  background-color: var(--surface-subtle);
-  padding: 4px 10px;
-  border-radius: 6px;
-  border: 1px solid var(--border-hairline);
-}
-
-.readiness-percent-chip {
-  font-size: 12px;
+.step-pill-num {
+  font-size: 10px;
   font-weight: 700;
-  color: #fff;
-  background-color: var(--color-ember);
-  padding: 4px 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.step-pill-done .step-pill-num {
+  color: #15803d;
+}
+
+[data-theme='dark'] .step-pill-done .step-pill-num {
+  color: #4ade80;
+}
+
+.step-pill-active .step-pill-num {
+  color: var(--color-ember-text);
+}
+
+.step-pill-icon-done {
+  width: 18px;
+  height: 18px;
   border-radius: 6px;
-}
-
-.readiness-progress-track {
-  height: 6px;
-  background-color: var(--surface-subtle);
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.readiness-progress-fill {
-  height: 100%;
-  background-color: var(--color-ember);
-  border-radius: 3px;
-  transition: width 0.3s ease;
-}
-
-.readiness-steps-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.readiness-step-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  background-color: var(--surface-subtle);
-  border: 1px solid var(--border-hairline);
-  border-radius: 10px;
-  padding: 14px 16px;
-  transition: all 0.15s ease;
-}
-
-.readiness-step-item.step-item-completed {
-  background-color: rgba(34, 197, 94, 0.05);
-  border-color: rgba(34, 197, 94, 0.3);
-}
-
-.readiness-step-checkbox {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  min-width: 44px;
-  min-height: 44px;
+  background-color: #15803d;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
 }
 
-.step-checkbox-inner {
-  width: 24px;
-  height: 24px;
-  border-radius: 6px;
-  border: 2px solid var(--border-input);
-  background-color: var(--surface-card);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 800;
-  color: #fff;
-  transition: all 0.15s ease;
+.step-pill-icon-active {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-ember);
 }
 
-.readiness-step-checkbox.checked .step-checkbox-inner {
-  background-color: #22c55e;
-  border-color: #22c55e;
-}
-
-.step-content-col {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.step-label-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.step-order-pill {
+.step-pill-icon-locked {
   font-size: 10px;
-  font-weight: 700;
-  background-color: var(--surface-card);
-  border: 1px solid var(--border-hairline);
-  padding: 2px 6px;
-  border-radius: 4px;
   color: var(--text-tertiary);
 }
 
-.step-main-label {
-  font-size: 14px;
+.step-pill-title {
+  font-size: 12px;
   font-weight: 700;
   color: var(--text-primary);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 }
 
-.step-timestamp {
-  font-size: 11px;
-  color: #16a34a;
-  margin-left: auto;
-  font-weight: 500;
+.step-pill-meta {
+  font-size: 10.5px;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
 }
 
-.readiness-step-desc {
-  font-size: 12.5px;
-  color: var(--text-secondary);
-  margin: 0;
-  line-height: 1.5;
+.step-pill-done .step-pill-meta {
+  color: #15803d;
+  font-weight: 600;
 }
 
-.readiness-proof-box {
-  background-color: var(--surface-card);
-  border: 1px solid var(--border-hairline);
-  border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 12px;
-  color: var(--text-primary);
+[data-theme='dark'] .step-pill-done .step-pill-meta {
+  color: #4ade80;
+}
+
+.step-pill-active .step-pill-meta {
+  color: var(--color-ember-text);
+  font-weight: 600;
+}
+
+.cell-readiness-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 165px;
+}
+
+.readiness-inline-bar-row {
   display: flex;
   align-items: center;
+  gap: 8px;
+}
+
+.readiness-inline-track {
+  flex: 1;
+  height: 6px;
+  background-color: var(--surface-subtle);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border-hairline);
+}
+
+.readiness-inline-fill {
+  height: 100%;
+  background-color: var(--color-ember);
+  border-radius: 999px;
+  transition: width 0.25s ease;
+}
+
+.readiness-inline-fill.fill-complete {
+  background-color: #15803d;
+}
+
+.readiness-inline-pct {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  min-width: 36px;
+  text-align: right;
+}
+
+.readiness-drawer-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.readiness-drawer-step-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.readiness-drawer-step-card.drawer-step-done {
+  border-color: rgba(21, 128, 61, 0.35);
+  background-color: rgba(21, 128, 61, 0.03);
+}
+
+.readiness-drawer-step-card.drawer-step-next {
+  border-color: rgba(255, 89, 0, 0.4);
+  background-color: rgba(255, 89, 0, 0.03);
+}
+
+.drawer-step-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 8px;
   flex-wrap: wrap;
 }
 
-.readiness-step-note-input-row {
+.drawer-step-title-group {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 6px;
-  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.step-notes-input {
-  background-color: var(--surface-card);
+.drawer-step-check-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1.5px solid var(--border-hairline);
+  background-color: var(--surface-subtle);
+  color: transparent;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+  padding: 0;
+}
+
+.drawer-step-check-btn.checked {
+  background-color: #15803d;
+  border-color: #15803d;
+  color: #ffffff;
+}
+
+.drawer-step-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.45;
+}
+
+.drawer-step-note-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background-color: var(--surface-subtle);
   border: 1px solid var(--border-hairline);
   border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 12.5px;
+  padding: 7px 10px;
+  font-size: 11.5px;
   color: var(--text-primary);
-  outline: none;
-  flex: 1;
-  min-width: 220px;
-  min-height: 40px;
 }
 
-.step-notes-input:focus {
+.drawer-step-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.drawer-step-input {
+  flex: 1;
+  min-height: 44px;
+  background-color: var(--surface-subtle);
+  border: 1px solid var(--border-hairline);
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+.drawer-step-input:focus-visible {
+  outline: 2px solid var(--color-ember);
+  outline-offset: 1px;
   border-color: var(--color-ember);
+  background-color: var(--surface-card);
+}
+
+@media (max-width: 1024px) {
+  .readiness-drawer-steps-grid {
+    grid-template-columns: 1fr;
+  }
 }

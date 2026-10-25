@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import '../styles/auth.css'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
 export function LoginPage({ theme, onToggleTheme }) {
   const navigate = useNavigate()
+  const location = useLocation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -43,6 +44,15 @@ export function LoginPage({ theme, onToggleTheme }) {
     setStatus('idle')
     setStatusMessage('')
   }
+
+  useEffect(() => {
+    if (location.state?.selectRole) {
+      const match = DEMO_ACCOUNTS.find((a) => a.role === location.state.selectRole)
+      if (match) {
+        handleQuickSelect(match)
+      }
+    }
+  }, [location.state])
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault()

@@ -1,3 +1,4 @@
+import { useRef, useEffect } from 'react'
 import { VendorProvider } from './context/VendorContext'
 import { useVendor } from './context/useVendor'
 import './styles/vendor.css'
@@ -35,6 +36,14 @@ const TAB_COMPONENTS = {
 function VendorDashboardInner({ theme, onToggleTheme }) {
   const { activeTab, activeModal, modalPayload, loading, toast } = useVendor()
   const ActiveTabView = TAB_COMPONENTS[activeTab] || VendorOverviewTab
+  const contentRef = useRef(null)
+
+  // Pastikan scroll posisi selalu reset ke paling atas saat tab berganti
+  useEffect(() => {
+    if (contentRef.current) {
+      contentRef.current.scrollTop = 0
+    }
+  }, [activeTab])
 
   return (
     <div className="vendor-dashboard-app">
@@ -56,7 +65,7 @@ function VendorDashboardInner({ theme, onToggleTheme }) {
       <div className="vendor-main-stage">
         <VendorHeader theme={theme} onToggleTheme={onToggleTheme} />
 
-        <main className="vendor-content-container">
+        <main className="vendor-content-container" ref={contentRef}>
           {loading ? (
             <div className="vendor-loading-state">
               <div className="vendor-loading-spinner" />
